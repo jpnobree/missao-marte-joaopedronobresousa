@@ -1,0 +1,46 @@
+@startuml diagrama-pacotes
+title Pacotes de solidexercicio10
+skinparam packageStyle rectangle
+hide empty members
+
+package "solidexercicio10" as root {
+  class Main
+}
+
+package "solidexercicio10.presentation" as presentation {
+  class JogoConsole
+  class MapaRenderer
+}
+
+package "solidexercicio10.service" as service {
+  class PartidaService
+  enum ResultadoTurno
+}
+
+package "solidexercicio10.repository" as repository {
+  interface RankingRepository
+  class ArquivoRankingRepository
+}
+
+package "solidexercicio10.model" as model {
+  class Missao
+  class RankingEntry
+}
+
+root ..> presentation : cria
+root ..> service : cria
+root ..> repository : cria ArquivoRankingRepository
+
+presentation ..> service
+presentation ..> model
+service ..> model
+service ..> RankingRepository : depende do contrato
+ArquivoRankingRepository ..|> RankingRepository
+repository ..> model
+
+note bottom of service
+  PartidaService recebe um RankingRepository
+  pelo construtor e não conhece
+  ArquivoRankingRepository (DIP).
+end note
+@enduml

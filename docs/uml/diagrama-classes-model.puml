@@ -1,0 +1,113 @@
+@startuml diagrama-classes-model
+title solidexercicio10.model
+skinparam classAttributeIconSize 0
+hide empty members
+
+package solidexercicio10.model {
+  interface Posicionavel {
+    + getX() : int
+    + getY() : int
+    + estaEm(x : int, y : int) : boolean
+    + mesmaPosicao(outro : Posicionavel) : boolean
+  }
+
+  interface Movel {
+    + mover(dx : int, dy : int) : void
+  }
+
+  abstract class EntidadeMapa {
+    # x : int
+    # y : int
+    + getX() : int
+    + getY() : int
+  }
+
+  abstract class Passageiro {
+    - nome : String
+    + getNome() : String
+    + {abstract} getPontuacao() : int
+  }
+
+  class Professor {
+    + getPontuacao() : int = 10
+  }
+  class Engenheiro {
+    + getPontuacao() : int = 15
+  }
+  class Astronauta {
+    + getPontuacao() : int = 20
+  }
+
+  class Asteroide
+
+  class Inimigo {
+    + mover(dx : int, dy : int) : void
+    + moverAleatorio(r : Random, limite : int) : void
+  }
+
+  class Nave {
+    - nome : String
+    - capacidade : int
+    - vidas : int
+    + mover(dx : int, dy : int) : void
+    + embarcar(p : Passageiro) : boolean
+    + perderVida() : void
+    + voltarParaBase() : void
+    + getVidas() : int
+  }
+
+  enum Dificuldade {
+    FACIL
+    MEDIO
+    DIFICIL
+    - qtdAsteroides : int
+    - pontosIniciais : int
+    - capacidadeNave : int
+  }
+
+  class Missao {
+    - piloto : String
+    - tamanhoMapa : int
+    - pontos : int
+    - movimentos : int
+    - resgatados : int
+    + moverNave(dx : int, dy : int) : void
+    + moverInimigos(r : Random) : void
+    + naveColidiu() : boolean
+    + resgatarNaPosicaoDaNave() : boolean
+    + consumirCombustivel() : void
+    + todosResgatados() : boolean
+    + getDuracaoSegundos() : long
+  }
+
+  class RankingEntry {
+    - nomeJogador : String
+    - pontos : int
+    - dataHora : String
+    - passageirosColetados : int
+    - dificuldade : String
+    - duracaoSegundos : long
+    - movimentos : int
+    + compareTo(o : RankingEntry) : int
+  }
+}
+
+Posicionavel <|.. EntidadeMapa
+EntidadeMapa <|-- Passageiro
+EntidadeMapa <|-- Asteroide
+EntidadeMapa <|-- Inimigo
+EntidadeMapa <|-- Nave
+Passageiro <|-- Professor
+Passageiro <|-- Engenheiro
+Passageiro <|-- Astronauta
+Movel <|.. Nave
+Movel <|.. Inimigo
+
+Missao *-- "1" Nave : nave
+Missao *-- "0..*" Passageiro : passageiros
+Missao *-- "0..*" Asteroide : asteroides
+Missao *-- "0..*" Inimigo : inimigos
+Missao --> "1" Dificuldade : dificuldade
+Missao --> "0..1" Passageiro : ultimoResgatado
+Nave o-- "0..capacidade" Passageiro : embarcados
+@enduml

@@ -1,5 +1,10 @@
 # 🚀 Missão Espacial: Pouso Lunar
 
+Trabalho realizado por:
+
+- João Pedro Nobre Sousa
+- Paulo Levi Fontes Furtado
+
 ![Java](https://img.shields.io/badge/Java-11%2B-orange?style=for-the-badge&logo=java)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Concluído-brightgreen?style=for-the-badge)
@@ -146,3 +151,51 @@ As estatísticas são gravadas automaticamente no arquivo `ranking.json` ao fina
 ```
 
 O jogo também realiza a leitura do ranking para listar o **Top 5 Pilotos** em ordem decrescente de pontuação.
+
+---
+
+## ♻️ Versão Refatorada (SOLID) — `solidexercicio10`
+
+A versão refatorada fica em `src/solidexercicio10/` e **não altera** o código original em `src/`.
+
+```text
+src/solidexercicio10/
+├── Main.java                         # ponto de entrada e composição das dependências
+├── model/                            # entidades e regras do domínio
+├── service/                          # PartidaService (fluxo do turno) + ResultadoTurno
+├── presentation/                     # JogoConsole (menus/entrada) + MapaRenderer (mapa/status)
+└── repository/                       # RankingRepository (contrato) + ArquivoRankingRepository (JSON)
+test/solidexercicio10/PartidaServiceTeste.java
+```
+
+Compilar e executar (JDK 8+), a partir da raiz do projeto:
+
+```bash
+javac -encoding UTF-8 -d out src/solidexercicio10/*.java src/solidexercicio10/*/*.java test/solidexercicio10/*.java
+java -cp out solidexercicio10.Main
+java -cp out solidexercicio10.PartidaServiceTeste
+```
+
+Os diagramas foram feitos em PlantUML com o plugin **PlantUML Integration** do IntelliJ. Para regerar os PNGs, abra o `.puml` no IntelliJ e use *Save diagram*.
+
+### Diagrama de classes do domínio
+
+Fonte: [`docs/uml/diagrama-classes-model.puml`](docs/uml/diagrama-classes-model.puml)
+
+![Diagrama de classes](docs/uml/diagrama-classes-model.png)
+
+- `EntidadeMapa` (abstrata) centraliza a posição e realiza `Posicionavel`; todas as coisas do mapa herdam dela.
+- `Passageiro` é abstrata com `getPontuacao()` abstrato: cada subclasse só define o bônus (OCP/LSP).
+- `Movel` é implementada apenas por quem se move (`Nave`, `Inimigo`); `Asteroide` não recebe um `mover` inútil (ISP).
+- `Missao` **compõe** a `Nave` (1) e as listas de passageiros, asteroides e inimigos (0..*); a `Nave` **agrega** os passageiros embarcados.
+- `Dificuldade` é um enum com os parâmetros da partida.
+
+### Diagrama de pacotes
+
+Fonte: [`docs/uml/diagrama-pacotes.puml`](docs/uml/diagrama-pacotes.puml)
+
+![Diagrama de pacotes](docs/uml/diagrama-pacotes.png)
+
+- As dependências apontam para dentro: `presentation → service → model`.
+- `service` depende apenas da interface `RankingRepository`; só o `Main` conhece `ArquivoRankingRepository` (DIP).
+- A revisão crítica está em [`REVISAO-SOLID.md`](REVISAO-SOLID.md).
