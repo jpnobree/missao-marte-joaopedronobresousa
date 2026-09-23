@@ -60,7 +60,6 @@ public class Main {
         Nave nave = new Nave("A-1", dif.getCapacidadeNave());
         Missao missao = new Missao(nave, tamanhoMapa);
 
-        // Adicionando 5 passageiros espalhados
         missao.adicionarPassageiro(new Professor("Prof. Silva", 2, 2));
         missao.adicionarPassageiro(new Engenheiro("Eng. Souza", -2, 1));
         missao.adicionarPassageiro(new Astronauta("Astro. Yuri", 1, -2));
@@ -107,7 +106,6 @@ public class Main {
                 nave.mover(dx, dy);
                 movimentos++;
 
-                // Consumo de combustível no retorno
                 if (resgatouTodos) {
                     pontos--;
                     if (pontos <= 0) {
@@ -147,7 +145,6 @@ public class Main {
                     System.out.println(">>> ALERTA DE POUSO: Retorne com segurança até a plataforma 'L' em (0,0)! <<<");
                 }
             } else {
-                // Checagem de pouso no (0,0)
                 if (nave.getX() == 0 && nave.getY() == 0) {
                     long tempoFim = System.currentTimeMillis();
                     long duracao = (tempoFim - tempoInicio) / 1000;
@@ -217,7 +214,6 @@ public class Main {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                // Leitura simples extraindo campos do formato manual de JSON
                 String nome = extrairValorJSON(line, "nome");
                 int pontos = Integer.parseInt(extrairValorJSON(line, "pontos"));
                 String data = extrairValorJSON(line, "dataHora");
@@ -229,7 +225,6 @@ public class Main {
                 lista.add(new RankingEntry(nome, pontos, data, pass, dif, dur, mov));
             }
         } catch (Exception e) {
-            // Ignora linhas malformatadas se houverem
         }
         Collections.sort(lista);
         return lista;

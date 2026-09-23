@@ -13,7 +13,6 @@ public class Inimigo {
     public int getY() { return y; }
 
     public void mover(Random r, int limite) {
-        // Move aleatoriamente nas direções X e Y respeitando o limite do mapa
         int dx = r.nextInt(3) - 1; // -1, 0, ou 1
         int dy = r.nextInt(3) - 1;
 
